@@ -133,4 +133,124 @@ export const authService = {
   },
 };
 
+export async function getPosts() {
+  const res = await fetch('/api/posts');
+  if (!res.ok) throw new Error('Failed to fetch posts');
+  return res.json();
+}
+
+export async function getPostById(id) {
+  const res = await fetch(`/api/posts/${id}`);
+  if (!res.ok) throw new Error('Failed to fetch post');
+  return res.json();
+}
+
+export async function login(email, password) {
+  const res = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || 'Login failed');
+  return data;
+}
+
+export async function register(username, email, password) {
+  const res = await fetch('/api/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || 'Registration failed');
+  return data;
+}
+
+export async function getCategories() {
+  const res = await fetch('/api/categories');
+  if (!res.ok) throw new Error('Failed to fetch categories');
+  return res.json();
+}
+
+export async function createPost(post, token) {
+  const res = await fetch('/api/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(post),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || data.msg || 'Failed to create post');
+  return data;
+}
+
+export async function updatePost(id, post, token) {
+  const res = await fetch(`/api/posts/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(post),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || data.msg || 'Failed to update post');
+  return data;
+}
+
+export async function deletePost(id, token) {
+  const res = await fetch(`/api/posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || data.msg || 'Failed to delete post');
+  return data;
+}
+
+export async function createCategory(name, token) {
+  const res = await fetch('/api/categories', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || data.msg || 'Failed to create category');
+  return data;
+}
+
+export async function updateCategory(id, name, token) {
+  const res = await fetch(`/api/categories/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || data.msg || 'Failed to update category');
+  return data;
+}
+
+export async function deleteCategory(id, token) {
+  const res = await fetch(`/api/categories/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.errors?.[0]?.msg || data.msg || 'Failed to delete category');
+  return data;
+}
+
 export default api; 
